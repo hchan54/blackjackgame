@@ -20,19 +20,22 @@ __STATIC_INLINE void lcd_write_cmd_u8(uint8_t DL)
   // ADD CODE
 
   // Start a transaction to the LCD by setting LCD_CSX low
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_CSX;
 
   // Indicate this is an instruction by setting the value on the LCD_DCX GPIO Pin
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_DCX;
   // Send the 8 bits of the command
+  PORT_IO_LCD_DATA->OUT = DL;
 
   // Set the write signal LCD_WRX low
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_WRX;
   // Set the write signal LCD_WRX high
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_WRX;
 
   // Default back to sending a data packet by LCD_DCX GPIO Pin
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_DCX;
   // End the transaction to the LCD by setting LCD_CSX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_CSX;
 }
 
 /*******************************************************************************
@@ -47,16 +50,17 @@ __STATIC_INLINE void  lcd_write_data_u8 (uint8_t x)
   // ADD CODE
 
   // Start a transaction to the LCD by setting LCD_CSX low
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_CSX;
   // Send the 8 bits of data
   //LCD_DATA  = x;
+  PORT_IO_LCD_DATA->OUT = x;
 
   // Set the write signal LCD_WRX low
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_WRX;
   // Set the write signal LCD_WRX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_WRX;
   // End the transaction to the LCD by setting LCD_CSX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_CSX;
 }
 
 /*******************************************************************************
@@ -75,21 +79,22 @@ __STATIC_INLINE void  lcd_write_data_u16(uint16_t y)
   uint8_t DL = y;        // Bits 7-0 of the pixel color
 
   // Start a transaction to the LCD by setting LCD_CSX low
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_CSX;
 
   // Send the upper 8 bits of the current pixel's color
-
+  PORT_IO_LCD_DATA->OUT = DH;
   // Set the write signal LCD_WRX low
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_WRX;
   // Set the write signal LCD_WRX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_WRX;
   // Send the lower 8 bits of the current pixel's color
-
+  PORT_IO_LCD_DATA->OUT = DL;
   // Set the write signal LCD_WRX low
-
+  PORT_IO_LCD_CMD->OUT_CLR = MASK_IO_LCD_WRX;
   // Set the write signal LCD_WRX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_WRX;
   // End the transaction to the LCD by setting LCD_CSX high
-
+  PORT_IO_LCD_CMD->OUT_SET = MASK_IO_LCD_CSX;
 }
 
 /*******************************************************************************

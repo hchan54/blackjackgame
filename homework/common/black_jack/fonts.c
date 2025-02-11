@@ -1,7 +1,7 @@
 /**
  * @file fonts.c
  * @author Joe Krachey (jkrachey@wisc.edu)
- * @author <ADD NAME>
+ * @author Hunter Chan and Jake Yun
  * @brief 
  * @version 0.1
  * @date 2025-01-14
@@ -3902,4 +3902,28 @@ const FONT_CHAR_INFO bebasNeue_28ptDescriptors[] =
  */
 bool font_get_image(char c, image_t *image)
 {
+	//check if the character is a printable ASCII character
+	if (c < '!' || c > '~') 
+	{
+		return false; 
+	}
+
+	//access the bitmap for the provided character
+	uint8_t index = c - '!';
+	uint16_t bitmap_offset = bebasNeue_28ptDescriptors[index].offset;
+	uint8_t *bitmap_addr = (uint8_t *) &bebasNeue_28ptBitmaps[bitmap_offset];
+
+	//set the image information
+	image->image_type = IMAGE_TYPE_FONT;
+	
+	image->width = bebasNeue_28ptDescriptors[index].width; //width and height 
+	image->height = bebasNeue_28ptDescriptors[index].height;
+	
+	image->bitmap = bitmap_addr; //address of the bitmap
+	
+	//set the foreground and background colors
+	image->fcolor = LCD_COLOR_BLACK;
+	image->bcolor = LCD_COLOR_WHITE;
+
+	return true; //valid ascii character was provided 
 }

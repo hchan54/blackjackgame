@@ -35,6 +35,13 @@
 #define LOC_GAME_STATS_DEALER_HAND_X    260 
 #define LOC_GAME_STATS_DEALER_HAND_Y    60 
 
+#define LOC_TEXT_ROW_1_Y                 3
+#define LOC_TEXT_ROW_2_Y                 43 
+
+#define LOC_TEXT_COL_1_X                 5
+#define LOC_TEXT_COL_2_X                 120 
+#define LOC_TEXT_COL_3_X                 260 
+
 /* This enumerated type will not be used until a later homework */
 #if 0
 typedef enum 

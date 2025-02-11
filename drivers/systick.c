@@ -27,13 +27,14 @@ bool systick_start(uint32_t ticks)
     }
 
     // Turn off the SysTick Timer
-
+    SysTick->CTRL = 0;
     // Set the current value to 0
-
+    SysTick->VAL = 0;
     // Set the period
-
+    SysTick->LOAD = ticks - 1;
     // Set the clock source to the main CPU clock and turn 
     // the timer on.
+    SysTick->CTRL = SYSTICK_CTRL_CLKSOURCE | SYSTICK_CTRL_ENABLE;
 
     return true;
 }
@@ -56,5 +57,12 @@ void systick_stop(void)
  */
 bool systick_expired(void)
 {
-    /* ADD CODE */
+    if (SysTick->CTRL & SYSTICK_CTRL_COUNTFLAG)
+    {
+        return true;
+    } 
+    else 
+    {
+        return false;
+    }
 }
