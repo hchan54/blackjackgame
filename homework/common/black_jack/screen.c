@@ -163,7 +163,7 @@ void screen_display_stats_player_hand(int16_t hand_value, uint16_t fcolor) {
         image_t char_image;
         font_get_image(player_val[i], &char_image);
 
-        lcd_draw_rectangle(x_position, char_image.width + 4, LOC_TEXT_ROW_1_Y, \
+        lcd_draw_rectangle(x_position, char_image.width + 16, LOC_TEXT_ROW_1_Y, \
             char_image.height + 4, LCD_COLOR_BLACK, false);
 
         lcd_draw_image(x_position, LOC_TEXT_ROW_1_Y, char_image.width, \
