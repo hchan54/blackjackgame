@@ -39,6 +39,11 @@ bool card_draw(card_t *card)
     // get the image of the card value
     got_image = font_get_image(card->card_id, &card_value);
 
+    if (card->suit == IMAGE_TYPE_HEART || card->suit == IMAGE_TYPE_DIAMOND)
+    {
+        card_value.fcolor = LCD_COLOR_RED;
+    }
+
     // check if the image has existing members
     if (!got_image)
     {

@@ -160,14 +160,35 @@ Circular_Buffer_Status test_circular_buffer(Circular_Buffer *buffer, char *value
     /* ADD CODE In a for loop, fill the circular buffer with the values found in 'values'
      * If any of the values cannot be added, return CB_ERROR_ADD_FAILED
      */
+    for (int i = 0; i < buf_size; i++)
+    {
+        
+        bool added = circular_buffer_add(&buffer,values[i]);
+        
+        if (!added)
+        {
+            return CB_ERROR_ADD_FAILED;
+        }
+    } 
 
     /* ADD CODE verify that the circular buffer is full.  If the circular buffer does not
      * indicate that it is full, return CB_ERROR_BUFFER_NOT_FULL.
      */
+    if (!circular_buffer_full(&buffer))
+    {
+        return CB_ERROR_BUFFER_NOT_FULL;
+    }
+
 
     /* ADD CODE Return CB_ERROR_BUFFER_OVERFLOW if you are able to add a value to the circular
      * buffer when it is full
      */
+    bool added = circular_buffer_add(&buffer, values[1]);
+
+    if (added && circular_buffer_full(&buffer))
+    {
+        return CB_ERROR_BUFFER_OVERFLOW;
+    }
 
     /* ADD CODE in a for loop, empty the circular buffer.  Verify that each value returned
      * from the circular buffer matches the value found in 'values[i]'.  If any of the values
@@ -175,11 +196,32 @@ Circular_Buffer_Status test_circular_buffer(Circular_Buffer *buffer, char *value
      * return CB_ERROR_VALUE_MISMATCH
      */
 
-    /* ADD CODE Return CB_ERROR_BUFFER_NOT_EMPTY false if the circular buffer is not empty */
+    char value = 0;
 
+    for (int i = 0; i < buf_size; i++)
+    {   
+        value = circular_buffer_remove(&buffer);
+        if (value != values[i])
+        {
+            return CB_ERROR_VALUE_MISMATCH;
+        }
+
+    }
+
+    /* ADD CODE Return CB_ERROR_BUFFER_NOT_EMPTY false if the circular buffer is not empty */
+    if (!circular_buffer_empty(&buffer)) 
+    {
+        return CB_ERROR_BUFFER_NOT_EMPTY;
+    }
+    
     /* ADD CODE Return CB_ERROR_BUFFER_UNDERFLOW if you are able to remove a value to a
      * circular buffer that is empty
      */
+
+    if (circular_buffer_remove(&buffer))
+    {
+        return CB_ERROR_BUFFER_UNDERFLOW;
+    }
 
     return CB_SUCCESS;
 }

@@ -77,31 +77,58 @@ void joystick_init(void)
  */
 uint16_t  joystick_read_x(void)
 {
-    /* ADD CODE */
-    return 0;
-    }
+    return cyhal_adc_read_u16(&joystick_adc_chan_x_obj);    
+}
 
 /** Read Y direction of Joystick 
  *
  * @param - None
  */
-uint16_t  joystick_read_y(void)
+uint16_t joystick_read_y(void)
 {
-    /* ADD CODE */
-    return 0;
+    return cyhal_adc_read_u16(&joystick_adc_chan_y_obj);
 }
 
-
-/* ADD CODE */
 /**
  * @brief 
  * Returns the current position of the joystick 
  * @return joystick_position_t 
  */
 joystick_position_t joystick_get_pos(void)
-{
+{   
+
+    uint16 x = joystick_read_x();
+    uint16 y = joystick_read_y();
+
+    bool is_left  = (x >= JOYSTICK_THRESH_X_LEFT);
+    bool is_right = (x <= JOYSTICK_THRESH_X_RIGHT);
+    bool is_up    = (y >= JOYSTICK_THRESH_Y_UP);
+    bool is_down  = (y <= JOYSTICK_THRESH_Y_DOWN);
+
+    // diagonal positions 
+    if (is_left && is_up)
+        return JOYSTICK_POS_UPPER_LEFT;
+    if (is_right && is_up)
+        return JOYSTICK_POS_UPPER_RIGHT;
+    if (is_left && is_down)
+        return JOYSTICK_POS_LOWER_LEFT;
+    if (is_right && is_down)
+        return JOYSTICK_POS_LOWER_RIGHT;
+    
+    // single axis positions 
+    if (is_left)
+        return JOYSTICK_POS_LEFT;
+    if (is_right)
+        return JOYSTICK_POS_RIGHT;
+    if (is_up)
+        return JOYSTICK_POS_UP;
+    if (is_down)
+        return JOYSTICK_POS_DOWN;
+
+    // center if no other position is met 
     return JOYSTICK_POS_CENTER;
 }
+
 
 /* ADD CODE */
 /**
@@ -111,6 +138,6 @@ joystick_position_t joystick_get_pos(void)
  * The enum value to be printed.
  */
 void joystick_print_pos(joystick_position_t position)
-{
+{   
 
 }

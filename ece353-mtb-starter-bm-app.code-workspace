@@ -29,7 +29,27 @@
             "--log=verbose",
             "--background-index",
             "--compile-commands-dir=${workspaceFolder}/build"
-        ]
+        ],
+        "files.associations": {
+            "*.json.liquid": "json",
+            "*.yaml.liquid": "yaml",
+            "*.md.liquid": "markdown",
+            "*.js.liquid": "liquid-javascript",
+            "*.css.liquid": "liquid-css",
+            "*.scss.liquid": "liquid-scss",
+            "algorithm": "c",
+            "complex": "c",
+            "functional": "c",
+            "optional": "c",
+            "system_error": "c",
+            "type_traits": "c",
+            "xlocmon": "c",
+            "xtr1common": "c",
+            "xutility": "c",
+            "array": "c",
+            "tuple": "c",
+            "utility": "c"
+        }
     },
     "extensions": {
         "recommendations": [ "marus25.cortex-debug", "ms-vscode.cpptools", "dan-c-underwood.arm" ]

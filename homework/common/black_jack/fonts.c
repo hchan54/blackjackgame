@@ -3922,7 +3922,7 @@ bool font_get_image(char c, image_t *image)
 	image->bitmap = bitmap_addr; //address of the bitmap
 	
 	//set the foreground and background colors
-	image->fcolor = LCD_COLOR_BLACK;
+	image->fcolor = LCD_COLOR_BLACK; 
 	image->bcolor = LCD_COLOR_WHITE;
 
 	return true; //valid ascii character was provided 

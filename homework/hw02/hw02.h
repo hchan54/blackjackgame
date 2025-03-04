@@ -16,10 +16,10 @@
 #if defined(HW02)
 #include "homework/common/black_jack/black_jack.h"
 #include "homework/common/black_jack/timer_050_ms.h"
-#include "card.h"
-#include "deck.h"
-#include "image.h"
-#include "screen.h"
+#include "homework/common/black_jack/card.h"
+#include "homework/common/black_jack/deck.h"
+#include "homework/common/black_jack/image.h"
+#include "homework/common/black_jack/screen.h"
 
 #endif
  #endif

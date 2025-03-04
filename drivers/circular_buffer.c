@@ -55,14 +55,18 @@ void circular_buffer_delete(Circular_Buffer * buffer)
 //*****************************************************************************
 bool circular_buffer_empty(Circular_Buffer *buffer)
 {
-  /* ADD CODE */
 
   /* Use the buffer->produce_count and buffer->consume count to determine if 
    * the circular buffer is empty 
    */
 
+   if (buffer->produce_count - buffer->consume_count == 0)
+   {
+      return true;
+   }
+
   /* You will need to modify the line below to return the correct boolean value */
-  return true;
+  return false;
 }
 
 //*****************************************************************************
@@ -73,14 +77,20 @@ bool circular_buffer_empty(Circular_Buffer *buffer)
 //*****************************************************************************
 bool circular_buffer_full(Circular_Buffer *buffer)
 {
+
   /* ADD CODE */
   
   /* Use the buffer->produce_count and buffer->consume count to determine if 
    * the circular buffer is full
    */
+  if (buffer->max_size - buffer->produce_count == 0) 
+  {
+    return true;
+
+  }
 
   /* You will need to modify the line below to return the correct boolean value */
-  return true;
+  return false;
 
 }
 //*****************************************************************************
@@ -97,7 +107,18 @@ bool circular_buffer_add(Circular_Buffer *buffer, char c)
   // Use the function defined above to determine if the circular buffer is full
   // If the circular buffer is full, return false.
 
+  if (circular_buffer_full(&buffer))
+  {
+    return false;
+  }
+
+  int maxsize = buffer->max_size;
+  int producecount = buffer->produce_count;
+
   // Add the data to the circular buffer.  
+  buffer->data[producecount%maxsize] = c;
+
+  buffer->produce_count++; 
 
   // Return true to indicate that the data was added to the
   // circular buffer.
@@ -113,7 +134,18 @@ bool circular_buffer_add(Circular_Buffer *buffer, char c)
 //*****************************************************************************
 uint32_t circular_buffer_get_num_bytes(Circular_Buffer *buffer)
 {
-  /* ADD CODE */
+  if (circular_buffer_full(&buffer)) 
+  {
+    return buffer->max_size;
+  }
+
+  if (circular_buffer_empty(&buffer))
+  {
+    return 0;
+  }
+
+  return buffer->produce_count - buffer->consume_count;
+
 }
 
 //*****************************************************************************
@@ -146,9 +178,19 @@ char circular_buffer_remove(Circular_Buffer *buffer)
 
   // If the circular buffer is empty, return 0.
   // Use the function defined above to determine if the circular buffer is empty
+  if (circular_buffer_empty(&buffer)) 
+  {
+    return 0;
+  }
+
+  int consumecount = buffer->consume_count; 
+  int maxsize = buffer->max_size; 
 
   // remove the character from the circular buffer
+  return_char = buffer->data[consumecount%maxsize];
   
+  buffer->consume_count++;
+
   // return the character
   return return_char;
 
