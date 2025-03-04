@@ -1,6 +1,6 @@
 /**
  * @file timer_050_ms.c
- * @author Jake Yun and Hunter Chan 
+ * @author Jake Yun and Hunter Chan
  * @brief 
  * @version 0.1
  * @date 2024-08-13
@@ -10,86 +10,78 @@
  */
  #include "timer_050_ms.h"
 
+
  #if defined(HW02) || defined (HW03) 
 /* 50mS Timer Handles*/
 cyhal_timer_t       Timer_MS_050_Obj; 
 cyhal_timer_cfg_t   Timer_MS_050_Cfg;
 
+/* The requirements for the handler are:
+Detect when SW1, SW2, or SW3 are pressed by setting the  appropriate fields in ECE353_Events
+Pressing a button should only result in a single detection, regardless of the length of the button press.
+Detect when the joystick is moved out of the center position by setting the  appropriate fields in ECE353_Events
+Store the current location of the joystick in a global variable that can be accessed by the main application code.
+*/
+
  void handler_timer_050_ms(void *callback_arg, cyhal_timer_event_t event)
  {
-    // store the states of joystick and switch positions 
+    // variables to store button states
     static bool sw1, sw2, sw3;
     static bool sw1_prev, sw2_prev, sw3_prev;
-    static joystick_position_t joystick_curr_pos = JOYSTICK_POS_CENTER;
-    static joystick_position_t joystick_prev_pos = JOYSTICK_POS_CENTER;
+    static joystick_position_t curr_position = JOYSTICK_POS_CENTER;
+    static joystick_position_t prev_position = JOYSTICK_POS_CENTER;
 
-    uint32_t reg_val = PORT_BUTTONS->IN; // read pushbutton values
+    uint32_t reg_val = PORT_BUTTONS->IN;
 
-    // detect SW1 push
-    if ((reg_val & SW1_MASK) == 0x00) 
-    {
-        sw1 = true; 
-        // edge detection 
-        if (sw1 != sw1_prev) 
-        {
+    // check if button 1 is pressed
+    if ((reg_val & SW1_MASK) == 0x00) {
+        sw1 = true;
+        // check for an edge by comparing with prev
+        if (sw1 != sw1_prev) {
             ECE353_Events.sw1 = 1;
         }
-    }
-    else 
-    {
-        sw1 = false; 
+    } else {
+        sw1 = false;
     }
 
-    // detect SW2 push
-    if ((reg_val & SW2_MASK) == 0x00) 
-    {
-        sw2 = true; 
-        // edge detection
-        if (sw2 != sw2_prev) 
-        {
+    // same logic for buttons 2 and 3
+    if ((reg_val & SW2_MASK) == 0x00) {
+        sw2 = true;
+        if (sw2 != sw2_prev) {
             ECE353_Events.sw2 = 1;
         }
-    }
-    else 
-    {
-        sw2 = false; 
+    } else {
+        sw2 = false;
     }
 
-    // detect SW3 push
-    if ((reg_val & SW3_MASK) == 0x00)
-    {
-        sw3 = true; 
-        // edge detection
-        if (sw3 != sw3_prev) 
-        {
+    if ((reg_val & SW3_MASK) == 0x00) {
+        sw3 = true;
+        if (sw3 != sw3_prev) {
             ECE353_Events.sw3 = 1;
         }
-    }
-    else 
-    {
-        sw1 = false; 
+    } else {
+        sw3 = false;
     }
 
-    // store the previous joystick position for reference 
-    joystick_prev_pos = joystick_curr_pos;
-    joystick_curr_pos = joystick_get_pos(); 
-    
-    // joystick has moved since center 
-    if (joystick_curr_pos != JOYSTICK_POS_CENTER && joystick_curr_pos != joystick_prev_pos) 
-    {
+    // read joystick position
+    prev_position = curr_position;
+    curr_position = joystick_get_pos();
+    // check if joystick moved FROM center
+    if (curr_position != prev_position && curr_position != JOYSTICK_POS_CENTER) {
         ECE353_Events.joystick = 1;
     }
 
-    // store previous switch states for edge detection 
+    // set previous values for next loop
     sw1_prev = sw1;
     sw2_prev = sw2;
     sw3_prev = sw3;
-}
+
+ }
 
 /* Configure a general purpose timer to generate an interrupt every 50mS*/
  void timer_050_ms_start(void)
  {
-    // initialize and start 50ms timer 
+    // initialize and start timer
     timer_init(&Timer_MS_050_Obj, &Timer_MS_050_Cfg, TICKS_MS_005 * 10, handler_timer_050_ms);
     cyhal_timer_start(&Timer_MS_050_Obj);
  }
