@@ -53,7 +53,7 @@ void screen_display_stats_funds(int16_t funds, uint16_t fcolor) {
         image_t char_image;
         font_get_image(funds_val[i], &char_image);
 
-        lcd_draw_rectangle(LOC_TEXT_COL_2_X + i*FONT_PIXELS_WIDTH, char_image.width + 4, LOC_TEXT_ROW_1_Y, \
+        lcd_draw_rectangle(LOC_TEXT_COL_2_X + i*FONT_PIXELS_WIDTH, char_image.width + 32, LOC_TEXT_ROW_1_Y, \
             char_image.height + 4, LCD_COLOR_BLACK, false);
 
         lcd_draw_image(x_position, LOC_TEXT_ROW_1_Y, char_image.width, \
@@ -107,7 +107,7 @@ void screen_display_stats_bet(int16_t bet, uint16_t fcolor)
         image_t char_image;
         font_get_image(bet_val[i], &char_image);
 
-        lcd_draw_rectangle(x_position, char_image.width + 4, LOC_TEXT_ROW_2_Y, \
+        lcd_draw_rectangle(x_position, char_image.width + 32, LOC_TEXT_ROW_2_Y, \
             char_image.height + 4, LCD_COLOR_BLACK, false);
 
         lcd_draw_image(x_position, LOC_TEXT_ROW_2_Y, char_image.width, \

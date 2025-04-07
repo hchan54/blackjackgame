@@ -17,13 +17,16 @@
 #include "i2c.h"
 
 /* ADD CODE */
-#define TCA9534_SUBORDINATE_ADDR                 0x00
+#define TCA9534_SUBORDINATE_ADDR                0x20
+
+/* interrupt pin for the IO Expander */
+#define PIN_IO_EXPANDER_INT P11_2      
 
 /* ADD CODE for IO Expander Register Addresses */
 #define TCA9534_INPUT_PORT_ADDR					 0x00
-#define TCA9534_OUTPUT_PORT_ADDR				 0x00
-#define TCA9534_POLARITY_ADDR					 0x00
-#define TCA9534_CONFIG_ADDR						 0x00
+#define TCA9534_OUTPUT_PORT_ADDR				 0x01
+#define TCA9534_POLARITY_ADDR					 0x02
+#define TCA9534_CONFIG_ADDR						 0x03
 
 /** Read the value of the input port
  *
@@ -52,5 +55,20 @@ void io_expander_set_polarity_inversion(uint8_t value);
  *
  */
 void io_expander_set_configuration(uint8_t value);
+
+
+/** Enable the interrupt for the IO Expander
+ *
+ * @param void
+ *
+ */
+void io_expander_enable_int(void);
+
+/** interrupt handler for the IO Expander
+ * 
+ * @param callback_arg unused
+ * @param event unused
+ */
+void io_expander_interrupt_handler(void *callback_arg, cyhal_gpio_event_t event);
 
 #endif /* IO_EXPANDER_H_ */

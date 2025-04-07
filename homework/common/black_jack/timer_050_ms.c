@@ -12,6 +12,7 @@
 
 
  #if defined(HW02) || defined (HW03) 
+ 
 /* 50mS Timer Handles*/
 cyhal_timer_t       Timer_MS_050_Obj; 
 cyhal_timer_cfg_t   Timer_MS_050_Cfg;
@@ -83,6 +84,7 @@ Store the current location of the joystick in a global variable that can be acce
  {
     // initialize and start timer
     timer_init(&Timer_MS_050_Obj, &Timer_MS_050_Cfg, TICKS_MS_005 * 10, handler_timer_050_ms);
+    
     cyhal_timer_start(&Timer_MS_050_Obj);
  }
 

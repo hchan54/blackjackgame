@@ -20,8 +20,8 @@ void eeprom_cs_init(void)
 {
    	cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
-	/* ADD CODE */
 	/* Initialize EEPROM Chip Select IO pins as an output*/
+	cyhal_gpio_init(PIN_SPI_EEPROM_CS, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_STRONG, 0);
 
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if init fails*/
 }
@@ -35,8 +35,8 @@ void eeprom_cs_init(void)
 void eeprom_wait_for_write(void)
 {
 	/* ADD CODE */
-	//uint8_t transmit_data[?] 	= {?, ?, ?, ....};
-	//uint8_t receive_data[?] 	= {?, ?, ?, ....};
+	uint8_t transmit_data[2] = {EEPROM_CMD_RDSR, 0x00};
+	uint8_t receive_data[2] = {0x00, 0x00};
    	cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
 	// Check to see if the eeprom is still updating
@@ -45,15 +45,25 @@ void eeprom_wait_for_write(void)
 	{
 		/* ADD CODE */
 		/* Set the CS Low */
+		cyhal_gpio_write(PIN_SPI_EEPROM_CS, 0);
 
 		// Starts a data transfer
+		rslt = cyhal_spi_transfer(
+			&mSPI,
+			transmit_data,
+			2,
+			receive_data,
+			2,
+		    0x00
+		);
 
 		CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if SPI transaction fails*/
 
 		// Set the CS High
+		cyhal_gpio_write(PIN_SPI_EEPROM_CS, 1);
 
 		// If the address was not ACKed, try again.
-	} while (1 /* Check the data returned from the EEPROM */);
+	} while ((receive_data[1] & 0x01) != 0);
 }
 
 /** Enables Writes to the EEPROM
@@ -64,17 +74,27 @@ void eeprom_wait_for_write(void)
 void eeprom_write_enable(void)
 {
 	/* ADD CODE */
-	//uint8_t transmit_data[?] 	= {?, ?, ?, ....};
-	//uint8_t receive_data[?] 	= {?, ?, ?, ....};
+	uint8_t transmit_data[1] = {EEPROM_CMD_WREN};
+	uint8_t receive_data[1] = {0x00};
    	cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
 	// Set the CS Low
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 0);
 
 	// Starts a data transfer
+	rslt = cyhal_spi_transfer(
+		&mSPI,
+		transmit_data,
+		1,
+		receive_data,
+		1,
+	    0x00
+	);
 
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if SPI transaction fails*/
 
 	// Set the CS High
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 1);
 }
 
 /** Disable Writes to the EEPROM
@@ -85,17 +105,27 @@ void eeprom_write_enable(void)
 void eeprom_write_disable(void)
 {
 	/* ADD CODE */
-	//uint8_t transmit_data[?] 	= {?, ?, ?, ....};
-	//uint8_t receive_data[?] 	= {?, ?, ?, ....};
+	uint8_t transmit_data[1] = {EEPROM_CMD_WRDI};
+	uint8_t receive_data[1] = {0x00};
    	cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
 	// Set the CS Low
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 0);
 
 	// Starts a data transfer
+	rslt = cyhal_spi_transfer(
+		&mSPI,
+		transmit_data,
+		1,
+		receive_data,
+		1,
+	    0x00
+	);
 
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if SPI transaction fails*/
 
 	// Set the CS High
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 1);
 }
 
 /** Writes a single byte to the specified address
@@ -107,8 +137,8 @@ void eeprom_write_disable(void)
 void eeprom_write_byte(uint16_t address, uint8_t data)
 {
 	/* ADD CODE */
-	//uint8_t transmit_data[?] 	= {?, ?, ?, ....};
-	//uint8_t receive_data[?] 	= {?, ?, ?, ....};
+	uint8_t transmit_data[4] = {EEPROM_CMD_WRITE, address >> 8, address, data};
+	uint8_t receive_data[4] = {0x00, 0x00, 0x00, 0x00};
    	cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
 
@@ -119,12 +149,22 @@ void eeprom_write_byte(uint16_t address, uint8_t data)
 	eeprom_write_enable();
 
 	// Set the CS Low
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 0);
 
 	// Starts a data transfer
+	rslt = cyhal_spi_transfer(
+		&mSPI,
+		transmit_data,
+		4,
+		receive_data,
+		4,
+	    0x00
+	);
 
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if SPI transaction fails*/
 
 	// Set the CS High
+	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 1);
 
 	// Disable writes to the eeprom
 	eeprom_write_disable();
@@ -138,8 +178,8 @@ void eeprom_write_byte(uint16_t address, uint8_t data)
 uint8_t eeprom_read_byte(uint16_t address)
 {
 	/* ADD CODE */
-	//uint8_t transmit_data[?] 	= {?, ?, ?, ....};
-	//uint8_t receive_data[?] 	= {?, ?, ?, ....};
+	uint8_t transmit_data[4] = {EEPROM_CMD_READ, address >> 8, address, 0x00};
+	uint8_t receive_data[4] = {0x00, 0x00, 0x00, 0x00};
     cy_rslt_t rslt = CY_RSLT_SUCCESS;
 
 
@@ -153,6 +193,14 @@ uint8_t eeprom_read_byte(uint16_t address)
 	cyhal_gpio_write(PIN_SPI_EEPROM_CS, 0);
 
 	// Starts a data transfer
+	rslt = cyhal_spi_transfer(
+		&mSPI,
+		transmit_data,
+		4,
+		receive_data,
+		4,
+	    0x00
+	);
 
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS); /* Halt MCU if SPI transaction fails*/
 
@@ -163,4 +211,5 @@ uint8_t eeprom_read_byte(uint16_t address)
 	eeprom_write_disable();
 
 	// Return the value from the EEPROM to the user
+	return receive_data[3];
 }

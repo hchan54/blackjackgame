@@ -14,7 +14,7 @@
 cyhal_i2c_t i2c_monarch_obj;
 
 // Define the I2C monarch configuration structure
-cyhal_i2c_cfg_t i2c_monarch_config =
+cyhal_i2c_cfg_t i2c_monarch_config = 
 {
     CYHAL_I2C_MODE_MASTER,
     0, // address is not used for master mode

@@ -14,17 +14,17 @@
 
 #include "main.h"
 
-#define LTR_SUBORDINATE_ADDR    0x00
+#define LTR_SUBORDINATE_ADDR    0x29
 
-#define LTR_REG_CONTR           0x00
-#define LTR_REG_MEAS_RATE       0x00
-#define LTR_REG_PART_ID         0x00
-#define LTR_REG_MANUFAC_ID      0x00
-#define LTR_REG_ALS_DATA_CH1_0  0x00
-#define LTR_REG_ALS_DATA_CH1_1  0x00
-#define LTR_REG_ALS_DATA_CH0_0  0x00
-#define LTR_REG_ALS_DATA_CH0_1  0x00
-#define LTR_REG_ALS_STATUS      0x00
+#define LTR_REG_CONTR           0x80
+#define LTR_REG_MEAS_RATE       0x85
+#define LTR_REG_PART_ID         0x86
+#define LTR_REG_MANUFAC_ID      0x87
+#define LTR_REG_ALS_DATA_CH1_0  0x88
+#define LTR_REG_ALS_DATA_CH1_1  0x89
+#define LTR_REG_ALS_DATA_CH0_0  0x8A
+#define LTR_REG_ALS_DATA_CH0_1  0x8B
+#define LTR_REG_ALS_STATUS      0x8C
 
 #define LTR_REG_CONTR_SW_RESET  (1 << 1)
 #define LTR_REG_CONTR_ALS_MODE  (1 << 0)

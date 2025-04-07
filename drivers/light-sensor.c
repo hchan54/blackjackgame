@@ -13,7 +13,6 @@
 
 uint8_t ltr_reg_read(uint8_t reg);
 
-
 /**
  * @brief 
  *  Returns the value of the CONTR register
@@ -68,7 +67,18 @@ uint8_t ltr_reg_read(uint8_t reg)
 {
     cy_rslt_t rslt;
 
-    /* ADD CODE */
+    uint8_t write_data[1] = {reg}; // specified register address
+    uint8_t read_data[1] = {0};
+
+    // write to the register address 
+    rslt = cyhal_i2c_master_write(&i2c_monarch_obj, LTR_SUBORDINATE_ADDR, write_data, 1, 0, true);
+    CY_ASSERT(rslt == CY_RSLT_SUCCESS);
+
+    // read byte of data from the sensor.
+    rslt = cyhal_i2c_master_read(&i2c_monarch_obj, LTR_SUBORDINATE_ADDR, read_data, 1, 0, true);
+    CY_ASSERT(rslt == CY_RSLT_SUCCESS);
+
+    return read_data[0];
 }
 /**
  * @brief 
@@ -77,7 +87,16 @@ uint8_t ltr_reg_read(uint8_t reg)
  */
 uint16_t ltr_light_sensor_get_ch0(void)
 {
-    /* ADD CODE */
+    cy_rslt_t rslt;
+
+    //  array to store data read from the sensor
+    uint8_t read_data[2] = {0x00, 0x00};
+
+    read_data[0] = ltr_reg_read(LTR_REG_ALS_DATA_CH0_0); // read the channel 0 lower bytes
+    read_data[1] = ltr_reg_read(LTR_REG_ALS_DATA_CH0_1); // read the channel 0 higher bytes
+
+    // return both channel 0 high and low bytes
+    return (read_data[1] << 8) | read_data[0];
 }
 
 /**
@@ -87,7 +106,17 @@ uint16_t ltr_light_sensor_get_ch0(void)
  */
 uint16_t ltr_light_sensor_get_ch1(void)
 {
-    /* ADD CODE */
+    cy_rslt_t rslt;
+    
+    //  array to store data read from the sensor
+    uint8_t read_data[2] = {0x00, 0x00};
+
+    // write the lower byte of channel 1 address
+    read_data[0] = ltr_reg_read(LTR_REG_ALS_DATA_CH1_0); // read the channel 1 lower bytes 
+    read_data[1] = ltr_reg_read(LTR_REG_ALS_DATA_CH1_1); // read the channel 0 higher bytes
+
+    // return both channel 1 high and low bytes
+    return (read_data[1] << 8) | read_data[0];
 }
 
 /**
@@ -97,6 +126,21 @@ uint16_t ltr_light_sensor_get_ch1(void)
 void ltr_light_sensor_start(void)
 {
     cy_rslt_t rslt;
-    /* ADD CODE */
+    
+    // 2 bytes of data to initiate a software reset
+    uint8_t reset_data[2] = {LTR_REG_CONTR, LTR_REG_CONTR_SW_RESET};
 
+    // write to reset the register
+    rslt = cyhal_i2c_master_write(&i2c_monarch_obj, LTR_SUBORDINATE_ADDR, reset_data, 2, 0, true);
+    CY_ASSERT(rslt == CY_RSLT_SUCCESS);
+    
+    // wait for reset to complete
+    cyhal_system_delay_ms(10);
+    
+    // 2 bytes of data to set ALS mode to active
+    uint8_t activate_data[2] = {LTR_REG_CONTR, LTR_REG_CONTR_ALS_MODE};
+
+    // write to activate the register
+    rslt = cyhal_i2c_master_write(&i2c_monarch_obj, LTR_SUBORDINATE_ADDR, activate_data, 2, 0, true);
+    CY_ASSERT(rslt == CY_RSLT_SUCCESS);
 }

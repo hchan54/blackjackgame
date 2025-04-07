@@ -48,7 +48,8 @@
             "xutility": "c",
             "array": "c",
             "tuple": "c",
-            "utility": "c"
+            "utility": "c",
+            "cyip_pass.h": "c"
         }
     },
     "extensions": {

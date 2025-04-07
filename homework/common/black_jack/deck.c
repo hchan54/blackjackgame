@@ -9,8 +9,8 @@
  * 
  */
 
- #include "deck.h"
- #include "cyip_pass.h"
+#include "deck.h"
+#include "cyip_pass.h"
 
  extern cyhal_trng_t trng_obj;
  

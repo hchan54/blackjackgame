@@ -18,6 +18,8 @@
     unsigned int sw3 : 1;       /* Falling edge of SW3 detected */
     unsigned int joystick : 1;  /* Joystick has moved position */
     unsigned int ipc_rx : 1;    /* Data received from remote board */
+    unsigned int timer_250_ms : 1;    /* 250ms timer event */
+    unsigned int io_expander : 1;      /* IO Expander interrupt event */
 } ece353_events_t;
 
 extern volatile ece353_events_t ECE353_Events;

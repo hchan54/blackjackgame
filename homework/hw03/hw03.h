@@ -1,6 +1,6 @@
 /**
- * @file hw02.h
- * @author < ADD YOUR NAMES >
+ * @file hw03.h
+ * @author Hunter Chan and Jake Yun
  * @brief 
  * @version 0.1
  * @date 2025-01-21
