@@ -69,6 +69,6 @@ void io_expander_enable_int(void);
  * @param callback_arg unused
  * @param event unused
  */
-void io_expander_interrupt_handler(void *callback_arg, cyhal_gpio_event_t event);
+void handler_io_expander(void *callback_arg, cyhal_gpio_event_t event);
 
 #endif /* IO_EXPANDER_H_ */

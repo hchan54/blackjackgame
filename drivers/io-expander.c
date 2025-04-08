@@ -119,7 +119,7 @@ void handler_io_expander(void *callback_arg, cyhal_gpio_event_t event)
 
 // callback data structure for the IO Expander interrupt
 cyhal_gpio_callback_data_t io_expander_cb_data = {
-    .callback = io_expander_interrupt_handler,
+    .callback = handler_io_expander,
     .callback_arg = NULL
 };
 

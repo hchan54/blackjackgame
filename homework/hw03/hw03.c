@@ -86,11 +86,17 @@ void main_app(void) {
   // local variable initialization 
   uint16_t funds = 0; // player funds
   uint16_t bet = 0; // player bet
+  uint16_t prev_funds = 0;
+  uint16_t prev_bet = 0; // previous bet
 
   int LED_count = 0; // number of LEDs on
    
   uint16_t fcolor = LCD_COLOR_GREEN; // current LCD color
+  uint16_t prev_fcolor = LCD_COLOR_GREEN; // previous LCD color
   uint16_t ch0_data = 0; // channel 0 data
+
+  screen_display_stats_funds(funds, fcolor); // update the funds on the LCD
+  screen_display_stats_bet(bet, fcolor); // update the bet on the LCD
 
   while (1) 
   {
@@ -173,8 +179,14 @@ void main_app(void) {
         score_write(funds); // write the funds to the EEPROM
     }
 
-    screen_display_stats_funds(funds, fcolor); // update the funds on the LCD
-    screen_display_stats_bet(bet, fcolor); // update the bet on the LCD
+    if (fcolor != prev_fcolor || prev_bet != bet || prev_funds != funds) // check if the color has changed
+    {
+      screen_display_stats_funds(funds, fcolor); // update the funds on the LCD
+      screen_display_stats_bet(bet, fcolor); // update the bet on the LCD
+      prev_fcolor = fcolor; // update the previous color
+      prev_bet = bet; // update the previous bet
+      prev_funds = funds; // update the previous funds
+    }
   }
 }
 #endif
