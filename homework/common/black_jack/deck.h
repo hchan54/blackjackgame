@@ -12,6 +12,7 @@
  #define __DECK_H__
 
  #include "card.h"
+ #include "hand.h"
 
 typedef struct
 {

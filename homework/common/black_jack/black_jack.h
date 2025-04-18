@@ -1,20 +1,20 @@
  #ifndef __BLACK_JACK_H__
  #define __BLACK_JACK_H__
 
-#undef HW_ENABLE_FREERTOS
+#define HW_ENABLE_FREERTOS
 
 /*****************************************************************************
 *  Homework Common Includes
 *****************************************************************************/
 #include "main.h"
-#include "homework/common/black_jack/black_jack_images.h"
-#include "homework/common/black_jack/card.h"
-//#include "homework/common/black_jack/hand.h"
-//#include "homework/common/black_jack/deck.h"
-#include "homework/common/black_jack/fonts.h"
-#include "homework/common/black_jack/image.h"
-#include "homework/common/black_jack/screen.h"
-//#include "homework/common/black_jack/game_info.h"
+#include "black_jack_images.h"
+#include "card.h"
+#include "hand.h"
+#include "deck.h"
+#include "fonts.h"
+#include "image.h"
+#include "screen.h"
+#include "game_info.h"
 
 /*****************************************************************************
 *  Homework FreeRTOS Includes
@@ -31,6 +31,7 @@
 #define EVENT_UI_SW3                (1 << 2)
 #define EVENT_UI_JOY_UP             (1 << 3)
 #define EVENT_UI_JOY_DOWN           (1 << 4)
+#define EVENT_UI_IO_EXP_INT         (1 << 5)
 
 
 /******************************************************************************
@@ -46,7 +47,7 @@
 /*****************************************************************************
 *  Homework Global Variables
 *****************************************************************************/
-//extern game_info_t      Game_Info;
+extern game_info_t      Game_Info;
 extern cyhal_trng_t     trng_obj;
 
 #ifdef HW_ENABLE_FREERTOS

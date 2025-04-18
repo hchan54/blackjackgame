@@ -67,6 +67,7 @@ typedef struct
    image_type_t suit;           /* Defines what suit the card is*/
    card_id_t    card_id;        /* Used to identify the value of the card */
    bool         hidden;         /* Should the value and suit be displayed or is it hidden */
+   uint16_t     card_bcolor;    /* Added to HW03 to allow light sensor to determine card color*/
    uint16_t     border_color;   /* The color of the cards border */
    uint16_t     hand_index;     /* Used to identify where a card should be drawn*/
 } card_t;
