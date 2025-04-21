@@ -16,7 +16,7 @@
 #if defined(HW04)
 
  void task_joystick(void *pvParameters);
-void task_joystick_init(void);
+ void task_joystick_init(void);
 
 #endif
 

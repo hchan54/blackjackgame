@@ -1,6 +1,6 @@
 /**
  * @file task_fsm_start.c
- * @author your name (you@domain.com)
+ * @author Hunter Chan (you@domain.com)
  * @brief 
  * @version 0.1
  * @date 2025-01-15
@@ -39,6 +39,15 @@ void task_fsm_test(void *param)
     {
         /* ADD CODE */
         /* Detect eg_UI events */
+        EventBits_t active_events = xEventGroupWaitBits(
+            eg_UI,
+            EVENT_UI_SW1 |
+            EVENT_UI_SW2 |
+            EVENT_UI_JOY_UP|
+            EVENT_UI_JOY_DOWN,
+            pdTRUE,    // clear bits on exit
+            pdFALSE,   
+        portMAX_DELAY);
 
        if(active_events & EVENT_UI_SW1)
        {

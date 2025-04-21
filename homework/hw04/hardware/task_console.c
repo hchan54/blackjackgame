@@ -183,7 +183,7 @@ void task_debug_printf(debug_message_type_t message_type, char *str_ptr, ...)
     va_list args;
 
     /* Allocate the message buffer */
-    message_buffer = pvPortMalloc(DEBUG_MESSAGE_MAX_LEN);
+    message_buffer = (char *)pvPortMalloc(DEBUG_MESSAGE_MAX_LEN);
 
     if (message_buffer)
     {

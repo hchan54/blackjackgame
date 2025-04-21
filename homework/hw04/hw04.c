@@ -17,8 +17,8 @@
 /* Global Variables                                                          */
 /*****************************************************************************/
 char APP_DESCRIPTION[] = "ECE353 S25 HW04";
-char APP_MEMBERS[] = "Name1, Name2";
-char APP_TEAM_NUM[] = "TeamXX";
+char APP_MEMBERS[] = "Hunter Chan, Jake Yun";
+char APP_TEAM_NUM[] = "Team13";
 
  cyhal_trng_t trng_obj;
 
@@ -26,7 +26,6 @@ char APP_TEAM_NUM[] = "TeamXX";
 EventGroupHandle_t eg_UI;
 
 SemaphoreHandle_t sem_Game_Info;
-
 
 game_info_t   Game_Info;
 
@@ -106,13 +105,13 @@ void main_app(void)
     eg_UI = xEventGroupCreate();
 
     /* Allocate Space for the Deck of Cards */
-    Game_Info.deck = pvPortMalloc(sizeof(deck_t));
+    Game_Info.deck = (deck_t*)pvPortMalloc(sizeof(deck_t));
     
     /* Allocate Space for the Dealer hand */
-    Game_Info.dealer_hand = pvPortMalloc(sizeof(hand_t));
+    Game_Info.dealer_hand = (hand_t*)pvPortMalloc(sizeof(hand_t));
     
     /* Allocate Space for the Player hand */
-    Game_Info.player_hand = pvPortMalloc(sizeof(hand_t));
+    Game_Info.player_hand = (hand_t*)pvPortMalloc(sizeof(hand_t));
 
     /* Create the Binary semaphore used to grant mutual exclusion 
      * of the Game Data

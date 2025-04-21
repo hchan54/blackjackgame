@@ -35,8 +35,8 @@
 
 /* ADD CODE */
 /* When you are ready to test a gate keeper task, change #undef to #define */
-#undef   HW04_ENABLE_TASK_SW
-#undef   HW04_ENABLE_TASK_JOYSTICK
+#define  HW04_ENABLE_TASK_SW
+#define  HW04_ENABLE_TASK_JOYSTICK
 #undef   HW04_ENABLE_TASK_EEPROM
 #undef   HW04_ENABLE_TASK_IO_EXPANDER
 #undef   HW04_ENABLE_TASK_LCD

@@ -9,6 +9,7 @@
  * 
  */
  #include "task_joystick.h"
+ #include "task_console.h"
 
  #if defined(HW04) 
 /* Event Groups */
@@ -26,10 +27,27 @@ extern EventGroupHandle_t eg_UI;
     /* Suppress warning for unused parameter */
     (void)param;
 
+    joystick_position_t joystick_prev;
+
     /* Repeatedly running part of the task */
     for (;;)
     {
-        /* ADD CODE */
+        vTaskDelay(pdMS_TO_TICKS(50)); // 50 ms task delay 
+
+        joystick_position_t joystick_curr = joystick_get_pos(); // sample the joystick
+
+        // detect moved joystick moved up
+        if ((joystick_prev == JOYSTICK_POS_CENTER) && (joystick_curr == JOYSTICK_POS_UP))
+        {
+            xEventGroupSetBits(eg_UI, EVENT_UI_JOY_UP);
+        }
+
+        if ((joystick_prev == JOYSTICK_POS_CENTER) && (joystick_curr == JOYSTICK_POS_DOWN))
+        {   
+            xEventGroupSetBits(eg_UI, EVENT_UI_JOY_DOWN);
+        }
+
+        joystick_prev = joystick_curr;
     }
 }
 

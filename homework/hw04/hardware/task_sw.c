@@ -10,6 +10,7 @@
  */
 
 #include "task_sw.h"
+#include "task_console.h"
 
 #if defined(HW04)
 
@@ -30,11 +31,36 @@ void task_switches(void *param)
 {
       /* Suppress warning for unused parameter */
       (void)param;
+    
+      // variables for rising edge detection 
+      bool sw1_prev, sw2_prev; 
+      uint32_t button_value = 0;
 
       /* Repeatedly running part of the task */
       for (;;)
       {
-          /* ADD CODE */
+        /* ADD CODE */
+        vTaskDelay(pdMS_TO_TICKS(50)); // 50 ms task delay
+
+        button_value = REG_PUSH_BUTTON_IN;  
+
+        // read in current
+        bool sw1_curr = ((button_value & SW1_MASK) == 0); 
+        bool sw2_curr = ((button_value & SW2_MASK) == 0);
+         
+        if (sw1_prev && !sw1_curr) // falling edge detection
+        {
+            xEventGroupSetBits(eg_UI, EVENT_UI_SW1); 
+        }
+
+        if (sw2_prev && !sw2_curr)
+        {
+            xEventGroupSetBits(eg_UI, EVENT_UI_SW2);
+        }
+
+        // update previous button states
+        sw1_prev = sw1_curr;
+        sw2_prev = sw2_curr;
       }
 }
 

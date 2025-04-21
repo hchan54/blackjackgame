@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025
  * 
  */
- #include "task_screen.h"
+#include "task_screen.h"
 #if defined(HW04)
 
 QueueHandle_t q_Screen;
