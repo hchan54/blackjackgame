@@ -10,6 +10,11 @@
  */
 #include "io-expander.h"
 #include "ece353_events.h"
+#include "hw04.h"
+#include "task_io_expander.h"
+
+cyhal_gpio_callback_data_t io_expander_cb_data;
+cyhal_gpio_callback_data_t io_expander_hw04_cb;
 
 /** Write a register on the TCA9534
  *
@@ -117,11 +122,12 @@ void handler_io_expander(void *callback_arg, cyhal_gpio_event_t event)
 	ECE353_Events.io_expander = 1; // set the event flag for the IO Expander interrupt
 }
 
-// callback data structure for the IO Expander interrupt
-cyhal_gpio_callback_data_t io_expander_cb_data = {
-    .callback = handler_io_expander,
-    .callback_arg = NULL
-};
+// // callback data structure for the IO Expander interrupt
+// cyhal_gpio_callback_data_t io_expander_cb_data = {
+//     .callback = handler_io_expander,
+//     .callback_arg = NULL
+// };
+
 
 /**
  * @brief 
@@ -139,10 +145,11 @@ void io_expander_enable_int(void)
 	CY_ASSERT(rslt == CY_RSLT_SUCCESS);
 
 	// register the callback function for the IO Expander interrupt
-	cyhal_gpio_register_callback(PIN_IO_EXPANDER_INT, &io_expander_cb_data);
+	io_expander_hw04_cb.callback = hw04_handler_io_exp;
+	cyhal_gpio_register_callback(PIN_IO_EXPANDER_INT, &io_expander_hw04_cb);
 	
 	// Enable the interrupt for the IO Expander
-	cyhal_gpio_enable_event(PIN_IO_EXPANDER_INT, CYHAL_GPIO_IRQ_FALL, 3, true);
+	cyhal_gpio_enable_event(PIN_IO_EXPANDER_INT, CYHAL_GPIO_IRQ_BOTH, 3, true);
 }
 
 

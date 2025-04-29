@@ -15,9 +15,8 @@
 /* Event Groups */
 extern EventGroupHandle_t eg_UI;
 
-void hw04_handler_io_exp(void *callback_arg, cyhal_gpio_event_t event);
-
 QueueHandle_t q_IO_Exp;
+
 
 /**
  * @brief 
@@ -27,7 +26,18 @@ QueueHandle_t q_IO_Exp;
  */
  void hw04_handler_io_exp(void *callback_arg, cyhal_gpio_event_t event)
  {
-    /* ADD CODE */
+    bool button_pressed = false;
+
+    // check if it is a falling edge
+    if (event == CYHAL_GPIO_IRQ_FALL) {
+        // if the button was not pressed before then set the bits
+        if (!button_pressed) {
+            button_pressed = true;
+            xEventGroupSetBitsFromISR(eg_UI, EVENT_UI_IO_EXP_INT, NULL);
+        }
+    } else if (event == CYHAL_GPIO_IRQ_RISE) {
+        button_pressed = false;
+    }
  }
 
 /**
@@ -40,11 +50,18 @@ void task_io_expander(void *param)
 {
     /* Suppress warning for unused parameter */
     (void)param;
+    uint8_t light;
 
-    /* Repeatedly running part of the task */
     for (;;)
     {
-        /* ADD CODE */
+        // wait for a message in queue
+        xQueueReceive(q_IO_Exp, &light, portMAX_DELAY);
+
+        // active high LEDs so we mask bits with LED_count
+        uint8_t led_mask = (1 << light) - 1;
+        // set the io expander
+        io_expander_set_output_port(led_mask);
+
     }
 }
 
@@ -55,7 +72,7 @@ void task_io_expander_init(void)
     q_IO_Exp = xQueueCreate(1, sizeof(uint8_t));
 
     /* Enable interrupts from the IO expander on the PSoC6*/
-    /* ADD CODE */
+    io_expander_enable_int();
 
     xTaskCreate(
         task_io_expander,

@@ -74,7 +74,7 @@
          image->image_type = IMAGE_TYPE_START_SCREEN;
          image->width = IMAGE_PIXELS_WIDTH_START_SCREEN;
          image->height = IMAGE_PIXELS_HEIGHT_START_SCREEN;
-         image->fcolor = LCD_COLOR_BLUE;
+         image->fcolor = LCD_COLOR_RED;
          image->bcolor = LCD_COLOR_BLACK;
          image->bitmap = IMAGE_BITMAP_START_SCREEN;
          break;

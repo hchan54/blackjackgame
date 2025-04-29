@@ -9,13 +9,14 @@
  * 
  */
 #include "task_eeprom.h"
+#include "hw04.h"
 
 #if defined(HW04) 
 
 /* Event Groups */
 extern EventGroupHandle_t eg_UI;
 
-QueueHandle_t q_EEPROM;
+//QueueHandle_t q_EEPROM;
 
 /**
  * @brief 
@@ -27,11 +28,33 @@ void task_eeprom(void *param)
 {
     /* Suppress warning for unused parameter */
     (void)param;
+    eeprom_msg_t msg;
+    u_int16_t score;
 
-    /* Repeatedly running part of the task */
     for (;;)
     {
-        /* ADD CODE */
+        // wait for message to arrive in queue
+        if (xQueueReceive(q_EEPROM, &msg, portMAX_DELAY) == pdTRUE)
+        {
+            // check the command of the message
+            switch (msg.operation)
+            {
+                case EEPROM_READ:
+                    // read then return value
+                    score = score_read();
+                    xQueueSend(msg.return_queue, &score, portMAX_DELAY);
+                    break;
+
+                case EEPROM_WRITE:
+                    // write the score to the EEPROM
+                    score_write(msg.score);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
     }
 }
 

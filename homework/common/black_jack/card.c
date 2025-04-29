@@ -68,18 +68,28 @@ bool card_draw(card_t *card)
 
     // draw the outer rectangle
     lcd_draw_rectangle(center_x, CARD_X_OUTER_WIDTH, CARD_HL_Y_CENTER, CARD_Y_OUTER_HEIGHT, card->border_color, true);
+
+    if (card->hidden)
+    {
+        // draw the inner rectangle
+        lcd_draw_rectangle(center_x, CARD_X_INNER_WIDTH, CARD_HL_Y_CENTER, CARD_Y_INNER_HEIGHT, LCD_COLOR_GRAY, true);
+        return true;
+    }
+
+    else {
     
-    // draw the innter background rectangle
-    lcd_draw_rectangle(center_x, CARD_X_INNER_WIDTH, CARD_HL_Y_CENTER, CARD_Y_INNER_HEIGHT, LCD_COLOR_WHITE, true);
-                       
-    // draw the suit image at the center 
-    lcd_draw_image(center_x, CARD_HL_Y_CENTER, card_suit.width, card_suit.height, card_suit.bitmap, card_suit.fcolor, card_suit.bcolor, true);
-    
-    // draw the card image at the top left 
-    lcd_draw_image(center_x - CARD_VL_X_TEXT_DELTA, CARD_HL_Y_UPPER, card_value.width, card_value.height, card_value.bitmap, card_value.fcolor, card_value.bcolor, true);
-    
-    // draw the card inmage at the bottom right
-    lcd_draw_image(center_x + CARD_VL_X_TEXT_DELTA, CARD_HL_Y_LOWER, card_value.width, card_value.height, card_value.bitmap, card_value.fcolor, card_value.bcolor, true);
-    
-    return true;
+        // draw the innter background rectangle
+        lcd_draw_rectangle(center_x, CARD_X_INNER_WIDTH, CARD_HL_Y_CENTER, CARD_Y_INNER_HEIGHT, LCD_COLOR_WHITE, true);
+                        
+        // draw the suit image at the center 
+        lcd_draw_image(center_x, CARD_HL_Y_CENTER, card_suit.width, card_suit.height, card_suit.bitmap, card_suit.fcolor, card_suit.bcolor, true);
+        
+        // draw the card image at the top left 
+        lcd_draw_image(center_x - CARD_VL_X_TEXT_DELTA, CARD_HL_Y_UPPER, card_value.width, card_value.height, card_value.bitmap, card_value.fcolor, card_value.bcolor, true);
+        
+        // draw the card inmage at the bottom right
+        lcd_draw_image(center_x + CARD_VL_X_TEXT_DELTA, CARD_HL_Y_LOWER, card_value.width, card_value.height, card_value.bitmap, card_value.fcolor, card_value.bcolor, true);
+        
+        return true;
+    }
 }
